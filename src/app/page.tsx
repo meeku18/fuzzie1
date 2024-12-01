@@ -1,101 +1,110 @@
+import { Button } from "@/components/ui/button";
+import { ContainerScroll } from "@/components/ui/global/container-scrool-animation";
+import { HeroParallax } from "@/components/ui/global/hero-parallax";
+import { InfiniteMovingCards } from "@/components/ui/global/infinte-card";
+import { LampDemo } from "@/components/ui/global/lamp";
+import Navbar from "@/components/ui/global/navbar";
+import { clients, pricingCards, products } from "@/lib/constants";
 import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Check } from "lucide-react";
+import clsx from "clsx";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <main className="">
+      <Navbar />
+      <section className="relative w-full h-screen">
+        <div className="absolute w-full h-screen [background:radial-gradient(125%_125%_at_50%_10%,#000_35%,#223_100%)]"></div>
+        <ContainerScroll
+          titleComponent={
+            <div className="flex items-center flex-col">
+              {/* copied this line of code for button */}
+              <Button
+                size={"lg"}
+                className="p-8 mb-8 md:mb-0 text-2xl w-full sm:w-fit border-t-2 rounded-full border-[#4D4D4D] bg-[#1F1F1F] hover:bg-white group transition-all flex items-center justify-center gap-4 hover:shadow-xl hover:shadow-neutral-500 duration-500"
+              >
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-neutral-500 to-neutral-600  md:text-center font-sans group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-black">
+                  Start For Free Today
+                </span>
+              </Button>
+              <h1 className="text-5xl md:text-8xl  bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-600 font-sans font-bold">
+                Automate Your Work With Fuzzie
+              </h1>
+            </div>
+          }
+        >
+          <Image
+            src={`/temp-banner.png`}
+            alt="hero"
+            height={720}
+            width={1400}
+            className="mx-auto rounded-2xl object-cover h-full object-left-top"
+            draggable={false}
+          />
+        </ContainerScroll>
+      </section>
+      {/* clients */}
+      <section>
+        <InfiniteMovingCards
+          items={clients}
+          className="mt-[7rem] md:mt-[26rem] "
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      </section>
+      <section className="mt-[150px]">
+        <HeroParallax products={products} />
+      </section>
+      <section>
+        <LampDemo />
+          <div className="relative flex flex-cols gap-14 justify-center mt-[-300px] z-[100] my-12 flex-wrap">
+          {pricingCards.map((card) => (
+            <Card className={clsx("h-[300px] w-[300px] flex flex-col justify-between",{
+              "bg-neutral-600":card.title==="Unlimited Saas"
+            })}>
+              <CardHeader>
+                <CardTitle className={clsx("",{
+                  "font-semibold":card.title==="Unlimited Saas"
+                })}>{card.title}</CardTitle>
+                <CardDescription>{card.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <span>{card.price}</span>
+                <span>/m</span>
+              </CardContent>
+              <CardFooter className="flex flex-col items-start gap-4 justify-between h-max">
+                <div className="">
+                  {card.features.map((f) => (
+                    <div className="flex gap-2 items-center">
+                      <Check className="text-muted-foreground"></Check>
+                      <div>{f}</div>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  href={`${card.priceId}`}
+                  className={clsx(
+                    "w-full rounded-lg p-2 text-center ",
+                    {
+                      "bg-muted-foreground": card.title !== "Unlimited Saas",
+                      "bg-neutral-900":card.title==="Unlimited Saas"
+                    }
+                  )}
+                >
+                  Get Started
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+    </main>
   );
 }
